@@ -1,4 +1,12 @@
-
+exports.checkId = (req, res, next, val) => {
+    //to be changed when mongodb added
+    if (val > 10)
+        return res.status(404).json({
+            status: 'Failed',
+            message: 'Invalid Id',
+        });
+    next();
+};
 
 exports.getTours = (req, res) => {
     // console.log(req.body);
@@ -11,9 +19,7 @@ exports.getTours = (req, res) => {
 
 exports.createTour = (req, res) => {};
 
-exports.getTour = (req, res) => {
-    console.log(req.params);
-};
+exports.getTour = (req, res) => {};
 
 exports.updatetour = (req, res) => {
     console.log(req.params.id);
