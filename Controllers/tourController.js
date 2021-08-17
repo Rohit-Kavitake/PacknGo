@@ -1,9 +1,18 @@
 exports.checkId = (req, res, next, val) => {
     //to be changed when mongodb added
-    if (val > 10)
+    if (val > 0)
         return res.status(404).json({
             status: 'Failed',
             message: 'Invalid Id',
+        });
+    next();
+};
+
+exports.checkBody = (req, res, next) => {
+    if (!(req.body.name && req.body.price))
+        return res.status(400).json({
+            status: 'Failed',
+            message: 'Name or Price Not defined while Creating a Tour',
         });
     next();
 };
