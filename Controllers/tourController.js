@@ -1,21 +1,24 @@
-exports.checkId = (req, res, next, val) => {
-    //to be changed when mongodb added
-    if (val > 0)
-        return res.status(404).json({
-            status: 'Failed',
-            message: 'Invalid Id',
-        });
-    next();
-};
+const Tour = require('./../models/tourModel');
+const mongoose = require('mongoose');
 
-exports.checkBody = (req, res, next) => {
-    if (!(req.body.name && req.body.price))
-        return res.status(400).json({
-            status: 'Failed',
-            message: 'Name or Price Not defined while Creating a Tour',
-        });
-    next();
-};
+// exports.checkId = (req, res, next, val) => {
+//     //to be changed when mongodb added
+//     if (val > 0)
+//         return res.status(404).json({
+//             status: 'Failed',
+//             message: 'Invalid Id',
+//         });
+//     next();
+// };
+
+// exports.checkBody = (req, res, next) => {
+//     if (!(req.body.name && req.body.price))
+//         return res.status(400).json({
+//             status: 'Failed',
+//             message: 'Name or Price Not defined while Creating a Tour',
+//         });
+//     next();
+// };
 
 exports.getTours = (req, res) => {
     // console.log(req.body);
@@ -26,7 +29,25 @@ exports.getTours = (req, res) => {
     });
 };
 
-exports.createTour = (req, res) => {};
+exports.createTour = async (req, res) => {
+    try {
+        // console.log(req.body);
+        const newTour = await Tour.create(req.body);
+
+        res.status(201).json({
+            status: 'success',
+            data: {
+                tour: newTour,
+            },
+        });
+    } catch (err) {
+        // console.log(err);
+        res.status(400).json({
+            status: 'Failed',
+            message: 'Invalid Data Sent!',
+        });
+    }
+};
 
 exports.getTour = (req, res) => {};
 
