@@ -20,7 +20,7 @@ const tourSchema = new mongoose.Schema({
         required: [true, 'A Tour must have a Group Size'],
     },
     difficulty: {
-        type: Number,
+        type: String,
         required: [true, 'A Tour must have a Difficulty'],
     },
     ratingsAverage: {
