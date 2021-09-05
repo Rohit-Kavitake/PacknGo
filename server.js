@@ -6,13 +6,13 @@ const app = require('./app');
 
 dotenv.config({ path: './config.env' });
 const mongoose = require('mongoose');
-const DB = '' + process.env.database;
+const DB = '' + process.env.DATABASE;
 mongoose
     .connect(DB, {
         useNewUrlParser: true,
     })
     .then(() => console.log('Database connected Successfully!'))
-    .catch((err) => console.log('Error Connecting Mongo : ' + err));
+    .catch((err) => console.log('Error Connecting Mongo : /n ' + err));
 
 const PORT = 8080;
 app.listen(PORT, () => {
