@@ -21,9 +21,16 @@ const mongoose = require('mongoose');
 // };
 
 exports.getTours = async (req, res) => {
-    // console.log(req.body);
+    // console.log(req.query);
     try {
-        const TourData = await Tour.find();
+        const query = { ...req.query };
+        const expelledFields = ['page', 'feilds', 'sort'];
+        expelledFields.forEach((el) => delete query[el]);
+
+        let queryStr = JSON.stringify(query);
+        queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (word) => `$${word}`);
+
+        const TourData = await Tour.find(JSON.parse(queryStr));
 
         res.status(200).json({
             status: 'success',
