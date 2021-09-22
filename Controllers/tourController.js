@@ -20,17 +20,30 @@ const mongoose = require('mongoose');
 //     next();
 // };
 
+class APIFeatures {
+    constructor(query, queryString) {
+        this.query = query;
+        this.queryString = queryString;
+    }
+}
+
 exports.getTours = async (req, res) => {
     // console.log(req.query);
     try {
         const query = { ...req.query };
-        const expelledFields = ['page', 'feilds', 'sort','limit'];
-        expelledFields.forEach((el) => delete query[el]);
+        // const expelledFields = ['page', 'feilds', 'sort', 'limit'];
+        // expelledFields.forEach((el) => delete query[el]);
 
         let queryStr = JSON.stringify(query);
-        queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (word) => `$${word}`);
+        // queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (word) => `$${word}`);
 
-        const TourData = await Tour.find(JSON.parse(queryStr));
+        let TourData = await Tour.find(JSON.parse(queryStr));
+
+        //Sorting
+        if (req.query.sort) {
+            console.log(req.query.sort);
+            TourData = TourData.sort(req.query.sort);
+        }
 
         res.status(200).json({
             status: 'success',

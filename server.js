@@ -18,7 +18,7 @@ mongoose
     .catch((err) => console.log('Error Connecting Mongo : /n ' + err));
 
 //Starting the server
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`PacknGo Server Is Running on Port : ${PORT}`);
 });
