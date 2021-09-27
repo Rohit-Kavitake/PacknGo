@@ -10,11 +10,11 @@ exports.getUsers = (req, res) => {
 exports.createUser = (req, res) => {};
 
 exports.getUser = (req, res) => {
-    console.log(req.params);
+    // console.log(req.params);
 };
 
 exports.updateUser = (req, res) => {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     res.status(200).json({
         status: 'Success',
         message: 'patched',

@@ -20,12 +20,12 @@ const mongoose = require('mongoose');
 //     next();
 // };
 
-class APIFeatures {
-    constructor(query, queryString) {
-        this.query = query;
-        this.queryString = queryString;
-    }
-}
+// class APIFeatures {
+//     constructor(query, queryString) {
+//         this.query = query;
+//         this.queryString = queryString;
+//     }
+// }
 
 exports.getTours = async (req, res) => {
     // console.log(req.query);
@@ -41,7 +41,7 @@ exports.getTours = async (req, res) => {
 
         //Sorting
         if (req.query.sort) {
-            console.log(req.query.sort);
+            // console.log(req.query.sort);
             TourData = TourData.sort(req.query.sort);
         }
 
