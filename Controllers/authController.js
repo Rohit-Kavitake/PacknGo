@@ -16,6 +16,7 @@ exports.signup = async (req, res, next) => {
             password: req.body.password,
             passwordConfirm: req.body.passwordConfirm,
             passwordChangedAt: req.body.passwordChangedAt,
+            role: req.body.role,
         });
 
         const token = signToken(newUser._id);
@@ -91,4 +92,15 @@ exports.protect = async (req, res, next) => {
     //Grant Access
     req.user = currentUser;
     next();
+};
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.roles))
+            return res.status(403).json({
+                status: 'Forbidden',
+                message: 'Access denied',
+            });
+        next()
+    };
 };
