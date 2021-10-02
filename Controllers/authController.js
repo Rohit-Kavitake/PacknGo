@@ -114,22 +114,26 @@ exports.forgotPassword = async (req, res, next) => {
             message: 'User not Found',
         });
 
-    const resetToken = user.createPasswordResetToken();
+    const resetToken = await user.createPasswordResetToken();
+    // console.log(resetToken);
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/user/resetPassword/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get(
+        'host'
+    )}/api/v1/user/resetPassword/${resetToken}`;
 
     const message = `Forgot Your Password? Submit a Patch request with updated Password at : ${resetUrl}.\n If you haven't Submitted Reset Password Request Please Ignore this mail. `;
 
     try {
         await sendEmail({
-            email: user.email,
+            email: req.body.email,
             subject: 'Reset password Link (valid for 10mins)',
             message,
         });
 
         res.status(200).json({
-            message: 'Your reset password token has been sent to email (token valid for 10 mins)',
+            message:
+                'Your reset password token has been sent to email (token valid for 10 mins)',
             status: 'success',
         });
     } catch (err) {
