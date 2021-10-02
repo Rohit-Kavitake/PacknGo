@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
+const sendEmail = require('./../utils/email');
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -101,6 +102,26 @@ exports.restrictTo = (...roles) => {
                 status: 'Forbidden',
                 message: 'Access denied',
             });
-        next()
+        next();
     };
+};
+
+exports.forgotPassword = async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user)
+        return res.status(404).json({
+            status: 'Fail',
+            message: 'User not Found',
+        });
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/user/resetPassword/${resetToken}`;
+
+    const message = `Forgot Your Password? Submit a Patch request with updated Password at : ${resetUrl}.\n If you haven't Submitted Reset Password Request Please Ignore this mail. `;
+};
+
+exports.resetPassword = (req, res, next) => {
+    return next();
 };
