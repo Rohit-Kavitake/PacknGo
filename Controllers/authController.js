@@ -51,7 +51,9 @@ exports.login = async (req, res, next) => {
 
     if (!user || !(await user.correctPassword(password, user.password))) {
         console.log('inccorrect password or email');
-        return next();
+        return res
+            .status(400)
+            .json({ message: 'invalid password or email', status: 'Fail' });
     }
 
     const token = signToken(user._id);
@@ -177,4 +179,30 @@ exports.resetPassword = async (req, res, next) => {
         status: 'success',
         token: token,
     });
+};
+
+exports.updatePassword =async (req, res, next) => {
+    const user = await User.findOne(req.user.id).select('+password');
+
+    if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+        console.log('inccorrect password or email');
+        return res
+            .status(400)
+            .json({ message: 'invalid password or email', status: 'Fail' });
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    const token = signToken(user._id);
+
+    res.status(200).json({
+        status: 'success',
+        token,
+        data: {
+            user
+        }
+    })
+
 };
