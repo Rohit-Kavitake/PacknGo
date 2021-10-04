@@ -52,7 +52,6 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function (next) {
     //run only if pass is modified
     if (!this.isModified('password')) return next();
-    console.log('Pass Check');
 
     this.password = await bcrypt.hash(this.password, 12);
 

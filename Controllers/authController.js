@@ -95,6 +95,7 @@ exports.protect = async (req, res, next) => {
 
     //Grant Access
     req.user = currentUser;
+    console.log('here');
     next();
 };
 
@@ -181,8 +182,8 @@ exports.resetPassword = async (req, res, next) => {
     });
 };
 
-exports.updatePassword =async (req, res, next) => {
-    const user = await User.findOne(req.user.id).select('+password');
+exports.updatePassword = async (req, res, next) => {
+    const user = await User.findOne({_id : req.user.id}).select('+password');
 
     if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
         console.log('inccorrect password or email');
@@ -201,8 +202,7 @@ exports.updatePassword =async (req, res, next) => {
         status: 'success',
         token,
         data: {
-            user
-        }
-    })
-
+            user,
+        },
+    });
 };
