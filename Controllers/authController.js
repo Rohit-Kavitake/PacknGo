@@ -10,6 +10,18 @@ const signToken = (id) => {
     });
 };
 
+const createSendToken = (user, statusCode, res) => {
+    const token = signToken(user._id);
+
+    res.status(statusCode).json({
+        status: 'success',
+        token,
+        data: {
+            user,
+        },
+    });
+};
+
 exports.signup = async (req, res, next) => {
     try {
         const newUser = await User.create({
@@ -21,15 +33,7 @@ exports.signup = async (req, res, next) => {
             role: req.body.role,
         });
 
-        const token = signToken(newUser._id);
-
-        res.status(201).json({
-            status: 'Success',
-            token: token,
-            data: {
-                user: newUser,
-            },
-        });
+        createSendToken(user, 200, res);
     } catch (err) {
         console.log(err);
         res.status(400).json({
@@ -56,11 +60,7 @@ exports.login = async (req, res, next) => {
             .json({ message: 'invalid password or email', status: 'Fail' });
     }
 
-    const token = signToken(user._id);
-    res.status(200).json({
-        status: 'success',
-        token: token,
-    });
+    createSendToken(user, 200, res);
 };
 
 exports.protect = async (req, res, next) => {
@@ -175,11 +175,7 @@ exports.resetPassword = async (req, res, next) => {
     user.passwordResetToken = undefined;
     await user.save();
 
-    const token = signToken(user._id);
-    res.status(200).json({
-        status: 'success',
-        token: token,
-    });
+    createSendToken(user, 200, res);
 };
 
 exports.updatePassword = async (req, res, next) => {
@@ -196,13 +192,5 @@ exports.updatePassword = async (req, res, next) => {
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
 
-    const token = signToken(user._id);
-
-    res.status(200).json({
-        status: 'success',
-        token,
-        data: {
-            user,
-        },
-    });
+    createSendToken(user, 200, res);
 };
