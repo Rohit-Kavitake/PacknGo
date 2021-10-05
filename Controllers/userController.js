@@ -37,8 +37,9 @@ exports.updateMe = async (req, res, next) => {
     });
 };
 
-exports.deleteUser = (req, res) => {
+exports.deleteUser = async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user._id, { active: false });
     res.status(204).json({
-        message: 'Tour Deleted',
+        message: 'User Deleted',
     });
 };
