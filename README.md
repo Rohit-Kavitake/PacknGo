@@ -1,6 +1,6 @@
 # PacknGo
 
-PacknGo is ServerSide Rendered Web Application.
+PacknGo is Backend Web Application.
 
 :wrench: Tech used
 -------------
